@@ -1,0 +1,4 @@
+expantion: "BLB"
+
+scraping:
+  base_url: "https://aetherhub.com/Limited/Ratings/"

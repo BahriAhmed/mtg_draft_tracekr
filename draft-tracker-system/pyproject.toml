@@ -16,6 +16,10 @@ dependencies = [
     "jupyterlab>=3.0",
     "notebook",
     "kedro~=1.1.1",
+    "pandas>=2.3.3",
+    "selenium>=4.39.0",
+    "kedro-datasets>=9.1.1",
+    "kedro-viz>=12.2.0",
 ]
 
 [project.scripts]
@@ -39,3 +43,6 @@ kedro_init_version = "1.1.1"
 tools = "['None']"
 example_pipeline = "False"
 source_dir = "src"
+
+[tool.kedro_telemetry]
+project_id = "637e5e4c09264a45a21042470c5dbe8e"
