@@ -1,10 +1,21 @@
 ratings_scraped:
   type: pandas.CSVDataset
-  filepath: data/01_raw/blb_card_ratings.csv
+  filepath: data/01_raw/card_ratings.csv
   save_args:
     index: False
-
 
 api_data:
   type: pandas.ParquetDataset
   filepath: data/01_raw/cards_info.parquet
+  save_args:
+    compression: snappy
+
+BIG_data:
+  type: pandas.ParquetDataset
+  filepath: data/10_raw/winning_drafts.parquet
+
+file_data:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/card_stats.csv
+  load_args:
+    sep: ','
