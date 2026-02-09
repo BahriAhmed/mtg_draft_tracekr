@@ -6,3 +6,5 @@ scraping:
 scryfall_api:
   base_url: "https://api.scryfall.com/cards/search/"
   query_template: "?order=set&q=e%3A{expansion}&unique=prints"
+
+db_path: data/01_raw/draft_popularity.db
