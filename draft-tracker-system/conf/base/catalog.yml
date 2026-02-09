@@ -12,7 +12,7 @@ api_data:
 
 BIG_data:
   type: pandas.ParquetDataset
-  filepath: data/10_raw/winning_drafts.parquet
+  filepath: data/01_raw/winning_drafts.parquet
 
 file_data:
   type: pandas.CSVDataset

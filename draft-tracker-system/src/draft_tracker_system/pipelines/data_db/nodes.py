@@ -49,5 +49,5 @@ def extract_stats_from_sql(db_path: str) -> pd.DataFrame:
         .reset_index()
         .rename(columns={"name": "colors"})
     )
-    print(final_df.head())
+    
     return final_df
