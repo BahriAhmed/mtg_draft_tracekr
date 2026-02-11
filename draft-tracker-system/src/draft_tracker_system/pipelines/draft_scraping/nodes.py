@@ -35,7 +35,6 @@ def scrape_cards(base_url: str, expansion: str) -> pd.DataFrame:
                 )
             )
             accept_button.click()
-            print("Cookies accepted.")
         except:
             print("No cookie popup detected.")
 
@@ -68,3 +67,24 @@ def scrape_cards(base_url: str, expansion: str) -> pd.DataFrame:
 
     df = pd.DataFrame(results)
     return df
+
+def prepare_card_tables(rating_df: pd.DataFrame, card_df: pd.DataFrame):
+    """
+    Prepare card rating table linking to card_id.
+    Unmatched card names are ignored.
+
+    """
+
+    df = rating_df.copy()
+
+    # Map card_name to card_id
+    name_to_id = dict(zip(card_df['name'], card_df['card_id']))
+    df['card_id'] = df['card_name'].map(name_to_id)
+
+    # Keep only matched rows
+    df = df[df['card_id'].notna()]
+
+    # Keep only needed columns
+    card_rating_df = df[['card_id', 'ai_rating', 'pro_rating', 'description']].copy()
+
+    return card_rating_df

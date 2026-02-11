@@ -8,3 +8,41 @@ scryfall_api:
   query_template: "?order=set&q=e%3A{expansion}&unique=prints"
 
 db_path: data/01_raw/draft_popularity.db
+
+COLUMN_MAP: {
+    "Name": "name",
+    "Color": "color",
+    "Rarity": "rarity",
+    "# Seen": "seen",
+    "ALSA": "alsa",
+    "# Picked": "picked",
+    "ATA": "ata",
+    "# GP": "gp",
+    "% GP": "gp_pct",
+    "GP WR": "gp_wr",
+    "# OH": "oh",
+    "OH WR": "oh_wr",
+    "# GD": "gd",
+    "GD WR": "gd_wr",
+    "# GIH": "gih",
+    "GIH WR": "gih_wr",
+    "# GNS": "gns",
+    "GNS WR": "gns_wr",
+    "IIH": "iih",
+  }
+
+
+database_path: data/02_intermediate/database.db
+cols_to_keep : [
+        "name", "scryfall_uri", "mana_cost", "type_line", "oracle_text",
+        "keywords", "power", "toughness", "loyalty", "rarity", "collector_number"
+      ]
+    
+
+MTG_COLOR_MAP : {
+    "White":"W",
+    "Blue":"U",
+    "Black":"B",
+    "Red":"R",
+    "Green":"G",
+}
