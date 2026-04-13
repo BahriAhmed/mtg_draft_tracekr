@@ -14,10 +14,6 @@ api_data:
   save_args:
     compression: snappy
 
-BIG_data:
-  type: pandas.ParquetDataset
-  filepath: data/01_raw/winning_drafts.parquet
-
 file_data:
   type: pandas.CSVDataset
   filepath: data/01_raw/card_stats.csv

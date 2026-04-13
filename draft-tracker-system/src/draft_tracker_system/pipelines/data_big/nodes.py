@@ -1,16 +1,22 @@
 import pandas as pd
 import ast
 
-def load_winning_drafts(df: pd.DataFrame) -> pd.DataFrame:
+from pyspark.sql import DataFrame
+from pyspark.sql import SparkSession
+from pyspark.sql import functions as F
+
+def load_winning_drafts(path: str) -> DataFrame:
     """
     Load winning drafts Parquet.
     """
-    
-    cols = ["deck_id"] + [c for c in df.columns if c != "deck_id"]
-    df = df[cols]
-    return df
-import pandas as pd
 
+    spark = SparkSession.builder.getOrCreate()
+    df = spark.read.parquet(path)
+
+    cols = ["deck_id"] + [c for c in df.columns if c != "deck_id"]
+    df = df.select(cols)
+
+    return df.toPandas()
 
 def prepare_card_tables(drafts_df: pd.DataFrame, card_df: pd.DataFrame):
     """
@@ -31,7 +37,7 @@ def prepare_card_tables(drafts_df: pd.DataFrame, card_df: pd.DataFrame):
 
     # Deck table 
     deck_table = df[['deck_id']].drop_duplicates().reset_index(drop=True)
-
+    
     # Pack table 
     # Each unique (deck_id, pack) combination becomes a pack
     pack_table = (

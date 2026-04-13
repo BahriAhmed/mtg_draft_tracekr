@@ -55,8 +55,6 @@ def prepare_df(df: pd.DataFrame, card_df: pd.DataFrame) -> pd.DataFrame:
 
     return card_info_df
 
-import pandas as pd
-
 def prepare_card_tables(card_info_df: pd.DataFrame):
     """
     Converts the 'keywords' list column in card_info_df into normalized tables:

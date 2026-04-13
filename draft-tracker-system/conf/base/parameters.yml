@@ -3,6 +3,9 @@ expansion: "BLB"
 scraping:
   base_url: "https://aetherhub.com/Limited/Ratings/"
 
+BIG_data:
+  filepath: data/01_raw/winning_drafts.parquet
+
 scryfall_api:
   base_url: "https://api.scryfall.com/cards/search/"
   query_template: "?order=set&q=e%3A{expansion}&unique=prints"

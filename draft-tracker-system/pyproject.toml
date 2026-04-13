@@ -24,6 +24,7 @@ dependencies = [
     "fastparquet>=2025.12.0",
     "pysqlite3>=0.6.0",
     "sqlalchemy>=2.0.46",
+    "pyspark>=4.1.1",
 ]
 
 [project.scripts]

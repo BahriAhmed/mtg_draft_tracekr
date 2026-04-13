@@ -7,7 +7,7 @@ def create_pipeline(**kwargs):
         [
             node(
                 func=load_winning_drafts,
-                inputs="BIG_data",
+                inputs="params:BIG_data.filepath",
                 outputs="winning_drafts",
                 name="clean_winning_drafts",
             ),

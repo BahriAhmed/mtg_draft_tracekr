@@ -16,7 +16,8 @@ def consolidate_all_to_db(
     card_keyword_table,
     pack_card_table,
     db_path: str
-):
+    ):
+
     # Ensure folder exists
     os.makedirs(os.path.dirname(db_path), exist_ok=True)
 
@@ -31,7 +32,6 @@ def consolidate_all_to_db(
         cursor.close()
 
     metadata = MetaData()
-
     
     with engine.begin() as conn:
         for t in [
@@ -50,7 +50,6 @@ def consolidate_all_to_db(
             
         ]:
             conn.execute(text(f"DROP TABLE IF EXISTS {t}"))
-
     
     rarity_sql = Table(
         "rarity_table", metadata,
@@ -104,9 +103,17 @@ def consolidate_all_to_db(
         Column("matches", Float, nullable=False),
     )
 
+    user_sql = Table(
+        "user_table", metadata,
+        Column("user_id", Integer, primary_key=True),
+        Column("username", String, nullable=False, unique=True),
+        Column("password", String, nullable=False)
+    )
+
     deck_sql = Table(
         "deck_table", metadata,
         Column("deck_id", Integer, primary_key=True),
+        Column("user_id", Integer, ForeignKey("user_table.user_id")),
         *(Column(c, String) for c in deck_table.columns if c != "deck_id")
     )
 
@@ -155,4 +162,3 @@ def consolidate_all_to_db(
         conn.execute(insert(pick_sql), pick_table.to_dict(orient="records"))
         conn.execute(insert(pack_card_sql), pack_card_table.to_dict(orient="records"))
         conn.execute(insert(rating_sql), rating_table.to_dict(orient="records"))
-    print(f"All card, archetype, and deck/pack/pick tables saved to {db_path} with FKs enforced.")
