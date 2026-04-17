@@ -77,7 +77,6 @@ def prepare_card_tables(final_df: pd.DataFrame, color_df: pd.DataFrame, MTG_COLO
 
     # Drop temporary column
     df = df.drop(columns=["colors","color_identity"])
-    print(df.head())
     return df
 
 

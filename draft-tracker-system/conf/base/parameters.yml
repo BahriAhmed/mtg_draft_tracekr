@@ -35,7 +35,8 @@ COLUMN_MAP: {
   }
 
 
-database_path: data/02_intermediate/database.db
+database_path: data/02_intermediate/database2.db
+
 cols_to_keep : [
         "name", "scryfall_uri", "mana_cost", "type_line", "oracle_text",
         "keywords", "power", "toughness", "loyalty", "rarity", "collector_number"

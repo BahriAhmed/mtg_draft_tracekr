@@ -25,6 +25,7 @@ dependencies = [
     "pysqlite3>=0.6.0",
     "sqlalchemy>=2.0.46",
     "pyspark>=4.1.1",
+    "psycopg2>=2.9.11",
 ]
 
 [project.scripts]

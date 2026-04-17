@@ -19,6 +19,3 @@ file_data:
   filepath: data/01_raw/card_stats.csv
   load_args:
     sep: ','
-
-
-

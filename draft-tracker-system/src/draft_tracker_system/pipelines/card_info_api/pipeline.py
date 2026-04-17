@@ -1,5 +1,5 @@
 from kedro.pipeline import Pipeline, node
-from .nodes import fetch_card_data, prepare_card_tables, prepare_df
+from .nodes import fetch_card_data, prepare_card_tables, prepare_df, build_type_tables
 
 
 def create_pipeline(**kwargs):
@@ -21,6 +21,11 @@ def create_pipeline(**kwargs):
                 inputs="card_info_df",
                 outputs=["card_info_table", "keyword_table", "card_info_keywords"],
                 name="Prepare_tables_from_api"
+            ),
+            node(
+                func=build_type_tables,
+                inputs="card_info_table",
+                outputs=["card_info_table_clean", "type_table", "subtype_table", "card_type_table", "card_subtype_table"]
             )
         ]
     )
