@@ -2,13 +2,29 @@ from draft_tracker_system.db.base import Base
 from draft_tracker_system.db.models import *
 from draft_tracker_system.db.session import get_engine, get_session
 from draft_tracker_system.db.repository import bulk_insert
+from draft_tracker_system.utiles.hash import hash_password
 from kedro.framework.session import KedroSession
+import pandas as pd
 
 def build_db_url():
     session = KedroSession.create()
     context = session.load_context()
-    creds = context.config_loader["credentials"]["postgres_db"]
+    creds = context.config_loader["credentials"]["credentials"]["postgres_db"]
     return f"postgresql+psycopg2://{creds['user']}:{creds['password']}@{creds['host']}:{creds['port']}/{creds['db']}"
+
+def init_admin():
+    session = KedroSession.create()
+    context = session.load_context()
+    admin = context.config_loader["credentials"]["credentials"]['admin_role']
+    return pd.DataFrame([{
+            'username': admin["user_name"], 
+            'password': hash_password(admin["user_password"]),
+            'role_id': admin["role"]
+            }])
+
+def init_role():
+    return pd.DataFrame([{'role_name': 'admin'},
+                         {'role_name': 'player'}])
 
 def consolidate_all_to_db(
     rarity_table,
@@ -42,6 +58,8 @@ def consolidate_all_to_db(
     card = card_table.merge(card_info_table, on="card_id", how="left")
     color = color_table.merge(archetype_stats, on="color_id", how='left').drop(columns = "stat_id")
     
+    bulk_insert(session, Role, init_role())
+    bulk_insert(session, User, init_admin())
 
     bulk_insert(session, Rarity, rarity_table)
     bulk_insert(session, Color, color)
@@ -58,6 +76,9 @@ def consolidate_all_to_db(
     bulk_insert(session, SubType, subtype_table)
     bulk_insert(session, CardType, card_type_table)
     bulk_insert(session, CardSubType, card_subtype_table)
+    
 
     session.commit()
     session.close()
+
+    

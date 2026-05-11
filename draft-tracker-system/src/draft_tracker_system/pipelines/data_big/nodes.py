@@ -38,7 +38,7 @@ def prepare_card_tables(drafts_df: pd.DataFrame, card_df: pd.DataFrame):
         .drop_duplicates()
         .reset_index(drop=True)
     )
-
+    deck_table['user_id'] = 1
 
     # Pack table
     pack_table = (

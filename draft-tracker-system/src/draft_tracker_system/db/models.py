@@ -121,7 +121,7 @@ class CardKeyword(Base):
 class User(Base):
     __tablename__ = "user_table"
 
-    user_id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String, nullable=False, unique=True)
     password = Column(String, nullable=False)
 

@@ -11,3 +11,6 @@ def get_engine(db_url):
 
 def get_session(engine):
     return sessionmaker(bind=engine)()
+
+def get_api_session(engine):
+    return sessionmaker(bind=engine, autoflush=False, autocommit=False)
