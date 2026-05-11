@@ -84,3 +84,45 @@ def delete_user(session, current_user, target_user_id):
     session.commit()
 
     return {"deleted_user_id": target_user_id}
+
+
+def update_username(session, current_user, target_user_id, new_username):
+
+    target_user = session.query(User).filter_by(user_id=target_user_id).first()
+
+    if not target_user:
+        raise ValueError("User not found")
+
+    # ADMIN CAN UPDATE ANY USER
+    if current_user.role.role_name == "admin":
+        existing = session.query(User).filter_by(username=new_username).first()
+        if existing:
+            raise ValueError("Username already taken")
+
+        target_user.username = new_username
+        session.commit()
+
+        return target_user
+
+    # PLAYER CAN ONLY UPDATE SELF
+    if current_user.user_id != target_user_id:
+        raise PermissionError("Not allowed to update this user")
+
+    existing = session.query(User).filter_by(username=new_username).first()
+    if existing:
+        raise ValueError("Username already taken")
+
+    target_user.username = new_username
+    session.commit()
+
+    return target_user
+
+def get_all_users(session, current_user):
+
+    # ONLY ADMIN CAN ACCESS
+    if current_user.role.role_name != "admin":
+        raise PermissionError("Not allowed")
+
+    users = session.query(User).all()
+
+    return users

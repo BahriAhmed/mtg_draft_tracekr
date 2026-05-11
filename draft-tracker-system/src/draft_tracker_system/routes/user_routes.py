@@ -5,7 +5,7 @@ from draft_tracker_system.utils.config import build_db_url
 from draft_tracker_system.db.session import get_engine, get_api_session
 from draft_tracker_system.db.models import User
 
-from draft_tracker_system.services.user_service import register_player, login_user, change_password, delete_user
+from draft_tracker_system.services.user_service import register_player, login_user, change_password, delete_user, update_username, get_all_users
 from draft_tracker_system.utils.security import create_access_token, decode_token
 
 security = HTTPBearer()
@@ -114,3 +114,34 @@ def remove_user(
         "message": "User deleted successfully",
         "data": result
     }
+
+@router.put("/change-username")
+def change_username(
+    user_id: int,
+    new_username: str,
+    db: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    user = update_username(db, current_user, user_id, new_username)
+
+    return {
+        "message": "Username updated successfully",
+        "user_id": user.user_id,
+        "username": user.username
+    }
+
+@router.get("/users")
+def read_all_users(
+    db: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    users = get_all_users(db, current_user)
+
+    return [
+        {
+            "user_id": u.user_id,
+            "username": u.username,
+            "role": u.role.role_name
+        }
+        for u in users
+    ]

@@ -4,7 +4,9 @@ from draft_tracker_system.services.user_service import (
     register_player,
     login_user,
     change_password,
-    delete_user
+    delete_user,
+    update_username,
+    get_all_users
 )
 
 from draft_tracker_system.db.models import User, Role
@@ -104,3 +106,76 @@ def test_admin_can_delete_any_user(db_session):
     result = delete_user(db_session, admin, player.user_id)
 
     assert result["deleted_user_id"] == player.user_id
+
+def test_player_can_update_own_username(db_session):
+    user = register_player(db_session, "john", "1234")
+
+    updated = update_username(
+        db_session,
+        user,
+        user.user_id,
+        "john_new"
+    )
+
+    assert updated.username == "john_new"
+
+def test_player_cannot_update_other_user(db_session):
+    user1 = register_player(db_session, "john", "1234")
+    user2 = register_player(db_session, "mike", "1234")
+
+    with pytest.raises(PermissionError):
+        update_username(
+            db_session,
+            user1,
+            user2.user_id,
+            "hacked_name"
+        )
+
+def test_admin_can_update_any_user(db_session):
+    user = register_player(db_session, "john", "1234")
+    admin = create_admin(db_session)
+
+    updated = update_username(
+        db_session,
+        admin,
+        user.user_id,
+        "admin_changed"
+    )
+
+    assert updated.username == "admin_changed"
+
+def test_username_already_taken(db_session):
+    user1 = register_player(db_session, "john", "1234")
+    user2 = register_player(db_session, "mike", "1234")
+
+    with pytest.raises(ValueError):
+        update_username(
+            db_session,
+            user2,
+            user2.user_id,
+            "john"
+        )
+
+def test_admin_can_read_all_users(db_session):
+    # create users
+    user1 = register_player(db_session, "john", "1234")
+    user2 = register_player(db_session, "mike", "1234")
+
+    admin = create_admin(db_session)
+
+    users = get_all_users(db_session, admin)
+
+    usernames = [u.username for u in users]
+
+    assert "john" in usernames
+    assert "mike" in usernames
+    assert "admin" in usernames
+
+import pytest
+
+def test_player_cannot_read_all_users(db_session):
+    user1 = register_player(db_session, "john", "1234")
+    user2 = register_player(db_session, "mike", "1234")
+
+    with pytest.raises(PermissionError):
+        get_all_users(db_session, user1)
